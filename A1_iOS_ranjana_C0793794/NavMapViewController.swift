@@ -6,11 +6,17 @@
 //
 
 import UIKit
+import MapKit
 
-class ViewController: UIViewController {
+class NavMapViewcontroller: UIViewController {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //test git
         // Do any additional setup after loading the view.
     }
 
