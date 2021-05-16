@@ -1,17 +1,15 @@
 {
   "images" : [
     {
-      "filename" : "icons8-place-marker-64.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "icons8-place-marker-64@2x.png",
+      "filename" : "icons8-marker-100.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "icons8-place-marker-64@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
