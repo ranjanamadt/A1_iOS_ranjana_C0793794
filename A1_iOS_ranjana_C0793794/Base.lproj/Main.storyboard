@@ -16,20 +16,34 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="yU7-i0-ew9">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yU7-i0-ew9">
+                                <rect key="frame" x="0.0" y="33" width="414" height="863"/>
                             </mapView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTF-0J-c4r">
+                                <rect key="frame" x="292" y="763" width="73" height="73"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="73" id="aOb-0J-96G"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="73" id="gGF-mJ-IEa"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="ic_nav_arrow"/>
+                                <connections>
+                                    <action selector="onNavigationclick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qBI-8l-xPO"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yU7-i0-ew9" secondAttribute="trailing" id="5oK-ME-ke1"/>
-                            <constraint firstAttribute="bottom" secondItem="yU7-i0-ew9" secondAttribute="bottom" id="Bkc-22-it1"/>
-                            <constraint firstItem="yU7-i0-ew9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="U0o-f5-hrT"/>
-                            <constraint firstItem="yU7-i0-ew9" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="uT8-gw-MvH"/>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="33" id="5Am-9Q-ESq"/>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ShT-cM-IJw"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dTF-0J-c4r" secondAttribute="bottom" constant="26" id="eLe-i9-Kq6"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dTF-0J-c4r" secondAttribute="trailing" constant="49" id="eho-EU-KrQ"/>
+                            <constraint firstAttribute="bottom" secondItem="yU7-i0-ew9" secondAttribute="bottom" id="tW9-eW-eNq"/>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="thF-ji-nVo"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="btnNavigation" destination="dTF-0J-c4r" id="cYv-MQ-INA"/>
                         <outlet property="mapView" destination="yU7-i0-ew9" id="owJ-BA-2N2"/>
                     </connections>
                 </viewController>
@@ -39,6 +53,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ic_nav_arrow" width="24" height="24"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
