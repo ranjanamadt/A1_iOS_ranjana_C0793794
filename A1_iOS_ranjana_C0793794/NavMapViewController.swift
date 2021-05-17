@@ -24,8 +24,9 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     
     var isFourthMarker = false
     
+    // Distance to check nearby
     var nearByDistance=800
-    
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +35,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         mapView.showsUserLocation=true
         
         // Intially Hide Navigation Button
-        btnNavigation.isHidden=true
+       btnNavigation.isHidden=true
         
         // Giving delegates of MKMapViewDelegate to this class
         mapView.delegate=self
@@ -116,10 +117,12 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         
         
        // print(String(tappedLocation.count)+"///")
+        clearLabels()
         
         // If User have not added any location then add location woth title "A" and keep navigation button hidden
         if (tappedLocation.isEmpty){
             mapView.removeOverlays(mapView.overlays)
+            
             addAnnotationWithTitle(title: "A", sender: sender)
             btnNavigation.isHidden=true
         }else if (tappedLocation.count<3){
@@ -140,7 +143,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
 
     
     }
-    
+   
     //MARK:- Add annotation on map double tap gesture
     
     func addAnnotationWithTitle(title:String,sender :UITapGestureRecognizer) {
@@ -215,19 +218,18 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
        
     }
     
-//    //MARK:- Method to draw Ploylines
-//    func drawTrianglePolylines(coordinates : [CLLocationCoordinate2D]) {
-//        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-//        let annotation = MKPointAnnotation()
-//        annotation.title = "dgfdgfdgd"
-//        polyline.coordinate
-//        mapView.addOverlay(polyline)
-//    }
+    //MARK:- Method to draw Ploylines
+    func drawTrianglePolylines(coordinates : [CLLocationCoordinate2D]) {
+        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+     
+        mapView.addOverlay(polyline)
+    }
 
     //MARK: - Draw Polygon in connecting all 3 locations and fill
     func drawTrianglePolygon(coordinates : [CLLocationCoordinate2D]) {
+        
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
-        mapView.addOverlay(polygon)
+          mapView.addOverlay(polygon)
     }
     
     //MARK: - Remove all pins from mapview
@@ -253,15 +255,22 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     @IBAction func onNavigationclick(_ sender: UIButton) {
         
         mapView.removeOverlays(mapView.overlays)
-
-        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["A"]!, desCoordinates: tappedLocation["B"]!)
-        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["B"]!, desCoordinates: tappedLocation["C"]!)
-        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["C"]!, desCoordinates: tappedLocation["A"]!)
+        clearLabels()
+        
+        // Declaring 3 Labels to show the distance between points
+       let labelA=UILabel(frame: CGRect(x: 0, y: 0, width: 120, height: 21))
+       let labelB=UILabel(frame: CGRect(x: 0, y: 0, width: 120, height: 21))
+       let labelC=UILabel(frame: CGRect(x: 0, y: 0, width: 120, height: 21))
+        
+      //Draw the routes between points
+        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["A"]!, desCoordinates: tappedLocation["B"]!,label:labelA)
+        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["B"]!, desCoordinates: tappedLocation["C"]!,label:labelB)
+        drawRouteBetweenPoints(sourceCoordinate: tappedLocation["C"]!, desCoordinates: tappedLocation["A"]!,label:labelC)
         
     }
   
     //MARK:- Function to draw routes between two points
-    func drawRouteBetweenPoints(sourceCoordinate : CLLocationCoordinate2D,desCoordinates : CLLocationCoordinate2D) {
+    func drawRouteBetweenPoints(sourceCoordinate : CLLocationCoordinate2D,desCoordinates : CLLocationCoordinate2D,label:UILabel) {
     
     let sourcePlaceMark = MKPlacemark(coordinate: sourceCoordinate)
     let destinationPlaceMark = MKPlacemark(coordinate: desCoordinates)
@@ -285,12 +294,34 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         // Draw a polyline
         self.mapView.addOverlay(route.polyline, level: .aboveRoads)
         
+        //get the cordinates of the polyline
+        let centerScreenPoint: CGPoint = self.mapView.convert(route.polyline.coordinate, toPointTo: nil)
+        label.center = centerScreenPoint
+        label.backgroundColor = .gray
+        label.textAlignment = .center
+        label.font=UIFont.systemFont(ofSize: 15)
+        
+        // Set distance between points on label
+        label.text = String(distanceBetweenTwoCoordinates(firstLocation:  convert2DToCLLoc(toCovert: sourceCoordinate), secondLocation: convert2DToCLLoc(toCovert: desCoordinates)))+" Meters"
+        
+        //add Label to Mapview
+        self.mapView.addSubview(label)
+        
         // Define the bounding map rect
         let rect = route.polyline.boundingMapRect
-        self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 200, left: 150, bottom: 200, right: 150), animated: true)
+        self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 100, left: 100, bottom: 100, right: 100), animated: true)
         
     }
 }
+    //MARK:- Clear all lavels
+    func clearLabels(){
+        for view in mapView.subviews {
+            if(view is UILabel){
+                view.removeFromSuperview()
+            }
+        }
+
+    }
 
 }
 
@@ -353,6 +384,8 @@ extension NavMapViewcontroller: MKMapViewDelegate {
     }
     
 
+
+    
  
 }
 

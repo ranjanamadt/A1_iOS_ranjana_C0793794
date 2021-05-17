@@ -3,15 +3,59 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Nav Map Viewcontroller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="NavMapViewcontroller" customModule="A1_iOS_ranjana_C0793794" customModuleProvider="target" sceneMemberID="viewController"/>
+                <viewController id="BYZ-38-t0r" customClass="NavMapViewcontroller" customModule="A1_iOS_ranjana_C0793794" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" zoomEnabled="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yU7-i0-ew9">
+                                <rect key="frame" x="0.0" y="33" width="414" height="863"/>
+                            </mapView>
+                            <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2mv-GB-0Kv">
+                                <rect key="frame" x="299" y="757" width="75" height="75"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="75" id="6RT-dr-YA5"/>
+                                    <constraint firstAttribute="width" constant="75" id="MIY-ka-E58"/>
+                                </constraints>
+                                <state key="normal" backgroundImage="ic_nav_arrow"/>
+                                <connections>
+                                    <action selector="onNavigationclick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Kt9-mG-Nag"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="33" id="5Am-9Q-ESq"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="2mv-GB-0Kv" secondAttribute="bottom" constant="30" id="69p-o0-ox1"/>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ShT-cM-IJw"/>
+                            <constraint firstAttribute="bottom" secondItem="yU7-i0-ew9" secondAttribute="bottom" id="tW9-eW-eNq"/>
+                            <constraint firstItem="yU7-i0-ew9" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="thF-ji-nVo"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2mv-GB-0Kv" secondAttribute="trailing" constant="40" id="wbG-ww-Ioy"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="btnNavigation" destination="2mv-GB-0Kv" id="qtv-MD-mPw"/>
+                        <outlet property="mapView" destination="yU7-i0-ew9" id="owJ-BA-2N2"/>
+                    </connections>
+                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-13.043478260869566" y="67.633928571428569"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="ic_nav_arrow" width="24" height="24"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
