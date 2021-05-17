@@ -58,7 +58,6 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     }
     
   
-    
     //MARK:-Function that respond to location updates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //removePin()
@@ -76,8 +75,8 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     //MARK:- Function to diaplay annotation on current location of User
     func displayAnnotaionOnLocation(latitude:CLLocationDegrees,longitude: CLLocationDegrees,locTitle:String, locSubtitle:String){
         //Defining Span lat long
-        let latDelta: CLLocationDegrees = 0.25
-        let lngDelta: CLLocationDegrees = 0.25
+        let latDelta: CLLocationDegrees = 0.10
+        let lngDelta: CLLocationDegrees = 0.10
         
         // Defining Span
         let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lngDelta)
