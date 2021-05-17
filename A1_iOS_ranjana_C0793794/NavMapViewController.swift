@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  A1_iOS_ranjana_C0793794
 //
-//  Created by one on 15/05/21.
+//  Created by Ranjana on 15/05/21.
 //
 
 import UIKit
@@ -22,6 +22,10 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     // Dictionary to keep tapped location coordinates and titles
     var tappedLocation = [String:CLLocationCoordinate2D]()
     
+    var isFourthMarker = false
+    
+    var nearByDistance=800
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +38,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         
         // Giving delegates of MKMapViewDelegate to this class
         mapView.delegate=self
-    
+        
         // Giving delegate of locationManager to this class
         locationManager.delegate = self
         
@@ -53,6 +57,12 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     }
     
   
+    @IBAction func onZoomOutClick() {
+    }
+    
+    @IBAction func onZoomInClick() {
+    }
+    
     
     //MARK:-Function that respond to location updates
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -71,8 +81,8 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     //MARK:- Function to diaplay annotation on current location of User
     func displayAnnotaionOnLocation(latitude:CLLocationDegrees,longitude: CLLocationDegrees,locTitle:String, locSubtitle:String){
         //Defining Span lat long
-        let latDelta: CLLocationDegrees = 0.10
-        let lngDelta: CLLocationDegrees = 0.10
+        let latDelta: CLLocationDegrees = 0.25
+        let lngDelta: CLLocationDegrees = 0.25
         
         // Defining Span
         let span = MKCoordinateSpan(latitudeDelta: latDelta, longitudeDelta: lngDelta)
@@ -110,13 +120,15 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     //MARK: - Function to drop Annotation on Map for Tapped Location
     @objc func dropMarkerOnTapLocation(sender: UITapGestureRecognizer) {
         
+        
+       // print(String(tappedLocation.count)+"///")
+        
         // If User have not added any location then add location woth title "A" and keep navigation button hidden
         if (tappedLocation.isEmpty){
             mapView.removeOverlays(mapView.overlays)
             addAnnotationWithTitle(title: "A", sender: sender)
             btnNavigation.isHidden=true
         }else if (tappedLocation.count<3){
-            
             // If User have at least one and less than 3 locations in tapped list
             if(!tappedLocation.keys.contains("A")){
                 addAnnotationWithTitle(title: "A", sender: sender)
@@ -128,10 +140,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
             
         }else if(tappedLocation.count==3){
             // If user already added 3 locations tryng to add the 4th
-           removePin()
-           tappedLocation.removeAll()
-           btnNavigation.isHidden=true
-            mapView.removeOverlays(mapView.overlays)
+            isFourthMarker=true
             addAnnotationWithTitle(title: "A", sender: sender)
         }
 
@@ -149,10 +158,10 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         var isNearByCoordinate=false
       
         
-        // Check if user to Tap on  marker or close in distance of 300 meters from  marker
+        // Check if user to Tap on  marker or close in near by distance from  marker
         for tappedLoc in tappedLocation{
             if (distanceBetweenTwoCoordinates(firstLocation:convert2DToCLLoc(toCovert: tappedLoc.value),
-                                              secondLocation: convert2DToCLLoc(toCovert: coordinate))<=300
+                                              secondLocation: convert2DToCLLoc(toCovert: coordinate))<=nearByDistance
             ){
                 isNearByCoordinate=true
                 // remove marker
@@ -165,26 +174,49 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         
         // If Tap is not near by of any marker
         if(!isNearByCoordinate){
-            if(tappedLocation.count<3){
+            //If 3 markers are not added
+            if(tappedLocation.count<3 ){
                 annotation.coordinate = coordinate
+                annotation.subtitle=String(distanceBetweenTwoCoordinates(
+                                            firstLocation:  convert2DToCLLoc(toCovert: mapView.userLocation.location!.coordinate),
+                                            secondLocation: convert2DToCLLoc(toCovert: coordinate)))+" meters away"
                 mapView.addAnnotation(annotation)
                 tappedLocation[title]=coordinate
+                
+                // If adding third marker draw the polygon
+                if(tappedLocation.count==3){
+                    btnNavigation.isHidden=false
+                    //drawTrianglePolylines()
+                    let values  = tappedLocation.values
+                    var coordinates = [CLLocationCoordinate2D]()
+                    for value in values{
+                        coordinates.append(value)
+                    }
+                    coordinates.append(coordinates[0])
+                    drawTrianglePolygon(coordinates: coordinates)
+                   // drawTrianglePolylines(coordinates: coordinates)
+                }
+            }else if(isFourthMarker){  // If adding fourth marker outside near by location
+                   
+                    // Clear all pins and overlays of Map view
+                    removePin()
+                    mapView.removeOverlays(mapView.overlays)
+                    tappedLocation.removeAll()
+                    btnNavigation.isHidden=true
+                
+                
+                    // Add New Pin with title "A"
+                    annotation.coordinate = coordinate
+                    annotation.subtitle=String(distanceBetweenTwoCoordinates(
+                                                firstLocation:  convert2DToCLLoc(toCovert: mapView.userLocation.location!.coordinate),
+                                                secondLocation: convert2DToCLLoc(toCovert: coordinate)))+" meters away"
+                    mapView.addAnnotation(annotation)
+                    tappedLocation[title]=coordinate
+                    isFourthMarker=false
             }
+            
         }
       
-        // If adding third marker drwa the polygon
-        if(tappedLocation.count==3){
-            btnNavigation.isHidden=false
-            //drawTrianglePolylines()
-            let values  = tappedLocation.values
-            var coordinates = [CLLocationCoordinate2D]()
-            for value in values{
-                coordinates.append(value)
-            }
-            coordinates.append(coordinates[0])
-            drawTrianglePolygon(coordinates: coordinates)
-        }
-        
         
        
     }
@@ -192,14 +224,15 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
 //    //MARK:- Method to draw Ploylines
 //    func drawTrianglePolylines(coordinates : [CLLocationCoordinate2D]) {
 //        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-//
+//        let annotation = MKPointAnnotation()
+//        annotation.title = "dgfdgfdgd"
+//        polyline.coordinate
 //        mapView.addOverlay(polyline)
 //    }
-    
+//
     //MARK: - Draw Polygon in connecting all 3 locations and fill
     func drawTrianglePolygon(coordinates : [CLLocationCoordinate2D]) {
         let polygon = MKPolygon(coordinates: coordinates, count: coordinates.count)
-      
         mapView.addOverlay(polygon)
     }
     
@@ -214,8 +247,9 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     func removeAnnotationFormMapAt(coodrinates: CLLocationCoordinate2D) {
         for annotation in mapView.annotations {
             if(distanceBetweenTwoCoordinates(firstLocation:convert2DToCLLoc(toCovert: annotation.coordinate),
-                                             secondLocation: convert2DToCLLoc(toCovert: coodrinates))<=300){
+                                             secondLocation: convert2DToCLLoc(toCovert: coodrinates))<=nearByDistance){
                mapView.removeAnnotation(annotation)
+                mapView.removeOverlays(mapView.overlays)
             }
         }
     }
@@ -246,7 +280,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
     directionRequest.destination = MKMapItem(placemark: destinationPlaceMark)
     
     // Set Tranportation type
-    directionRequest.transportType = .automobile
+    directionRequest.transportType = .walking
     
     // Calculate the direction
     let directions = MKDirections(request: directionRequest)
@@ -259,7 +293,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
         
         // Define the bounding map rect
         let rect = route.polyline.boundingMapRect
-        self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 100, left: 100, bottom: 200, right: 100), animated: true)
+        self.mapView.setVisibleMapRect(rect, edgePadding: UIEdgeInsets(top: 200, left: 150, bottom: 200, right: 150), animated: true)
         
     }
 }
@@ -287,38 +321,20 @@ extension NavMapViewcontroller: MKMapViewDelegate {
         }
     
         switch annotation.title {
-        case "Current Location":
-            let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
-           annotationView.markerTintColor = .blue
-            annotationView.image = UIImage(named: "ic_marker")
-            return annotationView
         case "A":
             let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "AcustomPin") ?? MKPinAnnotationView()
             annotationView.image = UIImage(named: "ic_marker_pink")
             annotationView.canShowCallout = true
-            annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            
             return annotationView
         case "B":
             let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "BcustomPin") ?? MKPinAnnotationView()
             annotationView.image = UIImage(named: "ic_marker_pink")
             annotationView.canShowCallout = true
-            annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             return annotationView
         case "C":
             let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "CcustomPin") ?? MKPinAnnotationView()
             annotationView.image = UIImage(named: "ic_marker_pink")
             annotationView.canShowCallout = true
-            
-            let label=UILabel()
-            
-            label.text=String(mapView.userLocation.location!.distance(from: CLLocation(latitude:tappedLocation["C"]!.latitude,longitude: tappedLocation["C"]!.longitude)))
-            
-            annotationView.rightCalloutAccessoryView=label
-        
-            //print(String(mapView.userLocation.location!.distance(from: CLLocation(latitude:tappedLocation["C"]!.latitude,longitude: tappedLocation["C"]!.longitude))))
-            
-            
             return annotationView
         default:
             return nil
@@ -336,6 +352,7 @@ extension NavMapViewcontroller: MKMapViewDelegate {
             rendrer.fillColor = UIColor.red.withAlphaComponent(0.5)
             rendrer.strokeColor = UIColor.systemGreen
             rendrer.lineWidth = 3
+           
             return rendrer
         }
         return MKOverlayRenderer()

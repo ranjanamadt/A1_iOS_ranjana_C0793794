@@ -30,12 +30,40 @@
                                     <action selector="onNavigationclick:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qBI-8l-xPO"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d9V-GZ-cEl">
+                                <rect key="frame" x="332" y="74" width="46" height="38"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="46" id="4li-LX-41V"/>
+                                    <constraint firstAttribute="height" constant="38" id="v1Q-OB-w0h"/>
+                                </constraints>
+                                <state key="normal" image="minus.magnifyingglass" catalog="system"/>
+                                <connections>
+                                    <action selector="onZoomOutClick" destination="BYZ-38-t0r" eventType="touchUpInside" id="4HD-RO-Dze"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sfJ-iw-OwQ">
+                                <rect key="frame" x="280" y="74" width="44" height="40"/>
+                                <color key="backgroundColor" systemColor="systemGray5Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="aG4-yg-hnR"/>
+                                </constraints>
+                                <state key="normal" image="plus.magnifyingglass" catalog="system"/>
+                                <connections>
+                                    <action selector="onZoomInClick" destination="BYZ-38-t0r" eventType="touchUpInside" id="gi2-MV-UNC"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="d9V-GZ-cEl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="0sa-5h-Orf"/>
                             <constraint firstItem="yU7-i0-ew9" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="33" id="5Am-9Q-ESq"/>
+                            <constraint firstItem="d9V-GZ-cEl" firstAttribute="leading" secondItem="sfJ-iw-OwQ" secondAttribute="trailing" constant="8" id="ANx-vr-YQO"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="d9V-GZ-cEl" secondAttribute="trailing" constant="36" id="C9R-B9-8sC"/>
+                            <constraint firstItem="sfJ-iw-OwQ" firstAttribute="top" secondItem="d9V-GZ-cEl" secondAttribute="top" id="QY8-N6-8Zt"/>
                             <constraint firstItem="yU7-i0-ew9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="ShT-cM-IJw"/>
+                            <constraint firstItem="sfJ-iw-OwQ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="280" id="dJv-FA-jGN"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dTF-0J-c4r" secondAttribute="bottom" constant="26" id="eLe-i9-Kq6"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dTF-0J-c4r" secondAttribute="trailing" constant="49" id="eho-EU-KrQ"/>
                             <constraint firstAttribute="bottom" secondItem="yU7-i0-ew9" secondAttribute="bottom" id="tW9-eW-eNq"/>
@@ -54,8 +82,13 @@
     </scenes>
     <resources>
         <image name="ic_nav_arrow" width="24" height="24"/>
+        <image name="minus.magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="plus.magnifyingglass" catalog="system" width="128" height="115"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray5Color">
+            <color red="0.89803921568627454" green="0.89803921568627454" blue="0.91764705882352937" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
