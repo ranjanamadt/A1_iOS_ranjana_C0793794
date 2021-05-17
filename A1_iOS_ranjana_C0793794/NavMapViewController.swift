@@ -188,7 +188,7 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
                     }
                     coordinates.append(coordinates[0])
                     drawTrianglePolygon(coordinates: coordinates)
-                   drawTrianglePolylines(coordinates: coordinates)
+                  // drawTrianglePolylines(coordinates: coordinates)
                 }
             }else if(isFourthMarker){  // If adding fourth marker outside near by location
                    
@@ -215,14 +215,14 @@ class NavMapViewcontroller: UIViewController , CLLocationManagerDelegate{
        
     }
     
-    //MARK:- Method to draw Ploylines
-    func drawTrianglePolylines(coordinates : [CLLocationCoordinate2D]) {
-        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
-        let annotation = MKPointAnnotation()
-        annotation.title = "dgfdgfdgd"
-        polyline.coordinate
-        mapView.addOverlay(polyline)
-    }
+//    //MARK:- Method to draw Ploylines
+//    func drawTrianglePolylines(coordinates : [CLLocationCoordinate2D]) {
+//        let polyline = MKPolyline(coordinates: coordinates, count: coordinates.count)
+//        let annotation = MKPointAnnotation()
+//        annotation.title = "dgfdgfdgd"
+//        polyline.coordinate
+//        mapView.addOverlay(polyline)
+//    }
 
     //MARK: - Draw Polygon in connecting all 3 locations and fill
     func drawTrianglePolygon(coordinates : [CLLocationCoordinate2D]) {
